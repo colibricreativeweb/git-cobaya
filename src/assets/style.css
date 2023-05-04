@@ -1,0 +1,21 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "css/fontello.css";
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #00cfff;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(0, 139, 214);
+  }
