@@ -4,11 +4,15 @@
 <template>
   <div>
     <div
-      class="flex items-start sm:items-center justify-center min-h-screen font-sans subpixel-antialiased"
+      class="flex items-start sm:items-center justify-center min-h-screen font-sans subpixel-antialiased bg-gradient-to-t from-blue-300/20 to-blue-200"
     >
+      <img
+        src="/temple.svg"
+        className="absolute h-screen w-full bg-no-repeat bg-cover object-cover bg-center opacity-[2%] dark:opacity-10"
+      />
       <div class="flex flex-col justify-center items-center">
         <div
-          class="relative top-0 py-1 px-2 border-t-0 sm:border-t border-b-4 border-l border-r border-[#00cfff] bg-teal-200/30 rounded-b-lg rounded-t-none sm:rounded-t-lg"
+          class="relative top-0 py-1 px-2 border-t-0 sm:border-t border-b-4 border-l border-r bg-opacity-40 opacity-80 shadow-xl filter backdrop-blur-md backdrop-filter border-[#00cfff] border-opacity-30 rounded-b-lg rounded-t-none sm:rounded-t-lg"
         >
           <h1 class="text-lg font-thin">
             <strong>Search</strong> any public Repository
@@ -29,7 +33,7 @@
                 required
               />
               <button
-                class="bg-[#00cfff] w-full hover:bg-[#008bd6] border-[#00cfff] hover:border-[#008bd6] text-sm border-4 text-white py-1 px-2 transition-all duration-200 rounded"
+                class="bg-[#00cfff] w-full hover:bg-[#20d6ff] border-[#00cfff] hover:border-[#20d6ff] text-sm border-4 text-white py-1 px-2 transition-all duration-200 rounded"
                 type="submit"
               >
                 Find
@@ -39,14 +43,21 @@
 
           <div v-if="repos" class="p-2">
             <div class="shadow-xl rounded-xl">
-              <div class="flex flex-col border border-[#00cfff] rounded-xl">
+              <div
+                class="flex flex-col border border-[#00cfff] border-opacity-30 rounded-xl bg-opacity-40 opacity-80 shadow-xl filter backdrop-blur-md backdrop-filter"
+              >
                 <div
                   class="p-8 md:p-4 flex flex-row justify-center flex-wrap md:flex-no-wrap min-w-full h-auto max-w-6xl"
                 >
                   <div class="flex justify-center">
                     <ul class="divide-y divide-[#00cfff] w-full">
                       <li v-for="repo in repos" :key="repo.id">
-                        <a :href="repo.html_url" target="_blank" rel="noopener noreferrer">{{ repo.name }}</a>
+                        <a
+                          :href="repo.html_url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >{{ repo.name }}</a
+                        >
                         <i class="icon-link-ext text-sm text-[#00cfff]" />
                         <p class="text-sm font-normal tracking-tight">
                           {{ repo.description }}
@@ -101,7 +112,9 @@ export default {
           const data = await response.json();
           const reposWithCommits = await Promise.all(
             data.map(async (repo) => {
-              const commitsResponse = await fetch(repo.commits_url.replace("{/sha}", ""));
+              const commitsResponse = await fetch(
+                repo.commits_url.replace("{/sha}", "")
+              );
               if (commitsResponse.ok) {
                 const commitsData = await commitsResponse.json();
                 return { ...repo, commitCount: commitsData.length };
