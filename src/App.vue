@@ -71,7 +71,7 @@
                           {{ new Date(repo.updated_at).toUTCString() }}
                         </p>
                         <p class="text-sm font-normal tracking-tight">
-                          Commits: {{ repo.commitCount }}
+                          Commits: {{ repo.commitCount }} || {{ repo.languages }}
                         </p>
                       </li>
                     </ul>
@@ -91,9 +91,16 @@
 
 <script>
 export default {
+  props: {
+    repo: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       username: "",
+      languages: [],
       repos: null,
       errorMsg: "",
     };
@@ -101,6 +108,7 @@ export default {
   methods: {
     async searchRepos() {
       this.repos = null;
+      this.languages = [];
       this.errorMsg = "";
 
       try {
@@ -124,6 +132,17 @@ export default {
             })
           );
           this.repos = reposWithCommits;
+
+          // Get the languages used in each repository
+          for (const repo of this.repos) {
+            const languagesResponse = await fetch(
+              `https://api.github.com/repos/${repo.full_name}/languages`
+            );
+            if (languagesResponse.ok) {
+              const languagesData = await languagesResponse.json();
+              repo.languages = languagesData;
+            }
+          }
         } else {
           throw new Error("Failed to fetch repositories");
         }
